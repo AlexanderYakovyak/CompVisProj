@@ -13,7 +13,7 @@ def draw_bounding_boxes(input_img, boxes, class_ids, confidences, labels, indici
         x, y, w, h = boxes[index]
         confidence = confidences[index]
 
-        color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+        color = (random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1))
 
         cv.rectangle(image_temp, (x, y), (x + w, y + h), color=color, thickness=2)
 

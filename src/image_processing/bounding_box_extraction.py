@@ -9,10 +9,9 @@ offset = 6
 
 counting_line_position = 400
 
-# List to store detection points
+
 detections = []
 cars = 0
-
 
 
 def get_center(x, y, w, h):
@@ -27,7 +26,6 @@ background_subtractor = cv2.bgsegm.createBackgroundSubtractorGMG()
 
 
 def bounding_box(image):
-    # Initialize background subtractor
 
     gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     blurred_img = cv2.GaussianBlur(gray_img, (3, 3), 5)

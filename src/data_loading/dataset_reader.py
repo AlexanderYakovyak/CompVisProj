@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import cv2 as cv
+import matplotlib.pyplot as plt
 
 import torch
 import tensorflow as tf
@@ -20,27 +21,29 @@ TRAINING_IMAGES = 1001
 TESTING_IMAGES = 175
 
 
-def load_image(file_name: str, ROOT_PATH: str):
+def load_image(file_name: str, root_path: str):
 
-    image_path = os.path.join(ROOT_PATH, file_name)
+    image_path = os.path.join(root_path, file_name)
 
-    image = tf.io.read_file(image_path)
+    original_image = cv.imread(image_path)
+    original_image = cv.cvtColor(original_image, cv.COLOR_BGR2RGB)
+    resized_image = cv.resize(original_image, (IMAGE_WIDTH, IMAGE_HEIGHT))
 
-    image = tf.image.decode_jpeg(image, channels=3)
-    image = tf.image.convert_image_dtype(image, dtype=tf.float32)
+    resized_image = tf.image.convert_image_dtype(resized_image, dtype=tf.float32)
+    resized_image = tf.clip_by_value(resized_image, clip_value_min=0.0, clip_value_max=1.0)
 
-    image = tf.clip_by_value(image, clip_value_min=0.0, clip_value_max=1.0)
-
-    return image
+    return resized_image
 
 
-def load_test_dataset(ROOT_PATH=test_data_dir):
-    images = np.empty(shape=(TESTING_IMAGES, *IMAGE_SIZE), dtype=np.float32)
+def load_test_dataset(root_path=test_data_dir, images_num=TESTING_IMAGES):
+
+    images = np.empty(shape=(images_num, *IMAGE_SIZE), dtype=np.float32)
 
     index = 0
-    for filename in os.listdir(ROOT_PATH):
+    for filename in os.listdir(root_path):
         if (filename.endswith(".jpg") or filename.endswith(".png")) and "dots" not in filename:
-            image = load_image(file_name=filename, ROOT_PATH=ROOT_PATH)
+
+            image = load_image(file_name=filename, root_path=root_path)
 
             if image is not None:
                 images[index] = image
@@ -49,7 +52,7 @@ def load_test_dataset(ROOT_PATH=test_data_dir):
     return images
 
 
-def load_train_dataset(metadata, ROOT_PATH=train_data_dir):
+def load_train_dataset(metadata, root_path=train_data_dir):
 
     image_paths = metadata['image']
 
@@ -59,7 +62,7 @@ def load_train_dataset(metadata, ROOT_PATH=train_data_dir):
     index = 0
     for image_path in tqdm(image_paths, desc="Loading"):
         try:
-            image = load_image(file_name=image_path, ROOT_PATH=ROOT_PATH)
+            image = load_image(file_name=image_path, root_path=root_path)
 
             box = np.array([
                 metadata['xmin'][index],

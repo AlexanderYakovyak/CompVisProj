@@ -9,6 +9,7 @@ test_trancos_dir = "../TRANCOS_v3/images_to_test/"
 f = open('resources/coco.names', 'rb')
 labels = list(n.decode('UTF-8').replace('\n', ' ').strip() for n in f.readlines())
 
+random_test_images = 'resources/random_images/'
 
 def pred_bbs(image, threshold_probability=0.9, iou_threshold=0.5, labels=labels):
     blob = image_to_blob(image)
@@ -26,12 +27,13 @@ def pred_bbs(image, threshold_probability=0.9, iou_threshold=0.5, labels=labels)
                         indicies=indices)
 
 
-def test_random_images(images_to_test, n_images=2):
+def test_random_images(images_to_test, n_images=1):
     plt.figure()
 
     for i in range(n_images):
         plt.subplot(n_images, 1, i + 1)
-        image = images_to_test[np.random.randint(len(images_to_test))]
+        image = images_to_test[3]
+        #image = images_to_test[np.random.randint(len(images_to_test))]
         pred_bbs(image)
 
     plt.show()
@@ -40,7 +42,7 @@ def test_random_images(images_to_test, n_images=2):
 if __name__ == '__main__':
     #metadata = pd.read_csv(train_csv_dir)
 
-    images = load_test_dataset()
+    images = load_test_dataset(root_path=random_test_images, images_num=6)
 
     #show_images_and_bbs(data=dataset[:5],GRID=[5, 1])
 
