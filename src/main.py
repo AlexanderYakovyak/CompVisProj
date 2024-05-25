@@ -3,13 +3,13 @@ from image_processing.data_visualization import *
 from image_processing.image_to_blob import image_to_blob
 from model.filtering import filter_output_probs
 
-train_csv_dir = 'resources/Kaggle_Cars_Dataset/train_solution_bounding_boxes.csv'
-test_trancos_dir = "../TRANCOS_v3/images_to_test/"
+train_csv_dir = '../resources/Kaggle_Cars_Dataset/train_solution_bounding_boxes.csv'
+test_trancos_dir = "../../TRANCOS_v3/images_to_test/"
 
-f = open('resources/coco.names', 'rb')
+f = open('../resources/coco.names', 'rb')
 labels = list(n.decode('UTF-8').replace('\n', ' ').strip() for n in f.readlines())
 
-random_test_images = 'resources/random_images/'
+random_test_images = '../resources/random_images/'
 
 def pred_bbs(image, threshold_probability=0.9, iou_threshold=0.5, labels=labels):
     blob = image_to_blob(image)
@@ -46,6 +46,6 @@ if __name__ == '__main__':
 
     #show_images_and_bbs(data=dataset[:5],GRID=[5, 1])
 
-    net = cv.dnn.readNet('resources/yolo-data/yolov3.weights', 'resources/yolo-data/yolov3.cfg')
+    net = cv.dnn.readNet('../resources/yolo-data/yolov3.weights', '../resources/yolo-data/yolov3.cfg')
 
     test_random_images(images)
