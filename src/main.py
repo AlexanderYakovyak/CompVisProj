@@ -5,7 +5,7 @@ os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
 import torch
 import torchvision
-from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
+
 
 
 from utilities import utils
