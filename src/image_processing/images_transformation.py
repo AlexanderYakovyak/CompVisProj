@@ -56,16 +56,6 @@ class CustomRandomHorizontalFlip(torch.nn.Module):
         return img, target
 
 
-def get_transform(train):
-    transforms = []
-    if train:
-        transforms.append(CustomRandomResizedCrop())
-        transforms.append(CustomRandomHorizontalFlip())
-    transforms.append(T.ToDtype(torch.float, scale=True))
-    transforms.append(T.ToPureTensor())
-    return T.Compose(transforms)
-
-
 def transform_images(images, coordinates, mean, std):
     transformed_images = []
     transformed_coordinates = []
@@ -89,3 +79,22 @@ def transform_images(images, coordinates, mean, std):
         transformed_coordinates.append(transformed_coords)
 
     return transformed_images, transformed_coordinates
+
+
+"""def get_transform(train):
+    transforms = []
+    if train:
+        transforms.append(CustomRandomResizedCrop())
+        transforms.append(CustomRandomHorizontalFlip())
+    transforms.append(T.ToDtype(torch.float, scale=True))
+    transforms.append(T.ToPureTensor())
+    return T.Compose(transforms)"""
+
+
+def get_transform(train):
+    transforms = []
+    if train:
+        transforms.append(T.RandomHorizontalFlip(0.5))
+    transforms.append(T.ToDtype(torch.float, scale=True))
+    transforms.append(T.ToPureTensor())
+    return T.Compose(transforms)
